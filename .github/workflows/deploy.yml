@@ -14,4 +14,4 @@ jobs:
     steps:
       - name: Deploy
         run: |
-        echo "The brand site was deployed."
+          echo "The brand site was deployed."
