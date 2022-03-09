@@ -1,5 +1,9 @@
 name: Update dependency version
 
+env:
+  GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
 on:
   repository_dispatch:
     types: [ dependency-version-bumped ]
@@ -20,6 +24,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12.16.3"
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "$GIT_SSH_KEY"
 
       - name: Use new version
         run: |
