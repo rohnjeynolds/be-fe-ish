@@ -13,5 +13,5 @@ jobs:
     # Mock deploy
     steps:
       - name: Deploy
-      - run: |
+        run: |
         echo "The brand site was deployed."
