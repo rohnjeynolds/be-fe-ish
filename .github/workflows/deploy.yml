@@ -1,0 +1,17 @@
+name: Deploy brand site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    # Mock deploy
+    steps:
+      - name: Deploy
+      - run: |
+        echo "The brand site was deployed."

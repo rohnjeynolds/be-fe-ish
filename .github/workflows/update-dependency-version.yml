@@ -1,0 +1,41 @@
+name: Update dependency version
+
+on:
+  repository_dispatch:
+    types: [ dependency-version-bumped ]
+
+jobs:
+  use-new-version:
+    runs-on: ubuntu-latest
+    env:
+      GIT_TAG: ${{ github.event.client_payload.tag }}
+      GIT_USER: ${{ github.event.client_payload.actor }}
+      FEATURE_BRANCH: ${{ github.event.client_payload.feature-branch }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.16.3
+
+      - name: Use new version
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "Github Actions"
+          npm install
+          npm install elementish@git+ssh://git@github.com/rohnjeynolds/elementish.git#${{ env.GIT_TAG }}
+
+      # Make changes to pull request here
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          add-paths: package.json, package-lock.json
+          commit-message: "Updating Elementish to ${{ env.GIT_TAG }}."
+          committer: "Github Actions <github-actions@github.com>"
+          author: "${{ env.GIT_USER }}"
+          branch: "${{ env.FEATURE_BRANCH }}"
+          base: main
+          title: "Updating Elementish to ${{ env.GIT_TAG }}."
