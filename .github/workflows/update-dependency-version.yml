@@ -19,7 +19,7 @@ jobs:
       - name: Set node version
         uses: actions/setup-node@v1
         with:
-          node-version: 12.16.3
+          node-version: "12.16.3"
 
       - name: Use new version
         run: |
