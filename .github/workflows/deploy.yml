@@ -1,11 +1,38 @@
 name: Deploy brand site
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - released
 
 jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    # Set node version.
+    steps:
+      - name: Set node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.16.3"
+
+      # Check out repo.
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Update package.json and package-lock.json with new version.
+      - name: Update package files
+        run: |
+          tag=${{ github.events.release.tag_name }}
+          version="${tag:1}"
+          npm --no-git-tag-version version $version
+          git status
+          git add package.json package-lock.json
+          git commit -m "Updating package files to reflect new version $version."
+          git status
+          git push
+          git status
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
