@@ -33,7 +33,7 @@ jobs:
           git add package.json package-lock.json
           git commit -m "Updating package files to reflect new version $version."
           git status
-          git push
+          git push origin HEAD:main
           git status
 
   deploy:
