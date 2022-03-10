@@ -6,4 +6,4 @@ Stub application representing a be-fe-* site.
 
 - `npm install`
 - `npm run start`
-- Point browswer to `http://localhost:3000`.
+- Point browser to `http://localhost:3000`.
