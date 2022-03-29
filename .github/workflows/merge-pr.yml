@@ -1,0 +1,59 @@
+name: Update dependency version
+
+env:
+  GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+  GIT_USER: ${{ github.event.client_payload.actor }}
+  FEATURE_BRANCH: ${{ github.event.client_payload.feature-branch }}
+  GIT_TAG: ${{ github.event.client_payload.tag }}
+
+on:
+  repository_dispatch:
+    types: [ elementish-tag-cut ]
+
+jobs:
+  update-elementish-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "$GIT_SSH_KEY"
+
+      - name: Set node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.16.3"
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.FEATURE_BRANCH }}
+
+      - name: Rebase
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "Github Actions"
+          git rebase origin/main
+
+      - name: Use new Elementish version
+        run: |
+          npm install
+          npm install elementish@git+ssh://git@github.com/rohnjeynolds/elementish.git#${{ env.GIT_TAG }}
+          git add package-lock.json
+          git commit -m "Updating to Elementish version ${{ env.GIT_TAG }}."
+          git push
+
+  merge-feature-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Merge feature branch
+        run: | 
+          git merge ${{ env.FEATURE_BRANCH }}
+          git branch -d ${{ env.FEATURE_BRANCH }}
+          git push
