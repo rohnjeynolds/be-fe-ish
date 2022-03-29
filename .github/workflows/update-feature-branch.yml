@@ -37,10 +37,7 @@ jobs:
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "Github Actions"
-          git branch
-          git status
           npm install elementish@git+ssh://git@github.com/rohnjeynolds/elementish.git#${{ env.FEATURE_BRANCH }}
-          git status
-          git add package.json package-lock.json
-          git status
+          git add package-lock.json
           git commit -m "New commits on Elementish branch ${{ env.FEATURE_BRANCH }}."
+          git push
