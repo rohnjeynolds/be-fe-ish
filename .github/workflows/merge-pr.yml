@@ -1,4 +1,4 @@
-name: Update dependency version
+name: Merge pull request
 
 env:
   GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
@@ -36,6 +36,7 @@ jobs:
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "Github Actions"
+          git fetch
           git rebase origin/main
 
       - name: Use new Elementish version
