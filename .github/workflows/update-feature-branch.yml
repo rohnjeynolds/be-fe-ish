@@ -14,6 +14,7 @@ jobs:
     env:
       GIT_USER: ${{ github.event.client_payload.actor }}
       FEATURE_BRANCH: ${{ github.event.client_payload.feature-branch }}
+      COMMIT_MESSAGE: ${{ github.event.client_payload.commit-message }}
 
     steps:
       - name: Set node version
