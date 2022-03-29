@@ -1,4 +1,4 @@
-name: Update feature branch
+name: Update pull request
 
 env:
   GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
@@ -6,10 +6,10 @@ env:
 
 on:
   repository_dispatch:
-    types: [ element-feature-branch-updated ]
+    types: [ elementish-pr-updated ]
 
 jobs:
-  use-new-version:
+  update-pr:
     runs-on: ubuntu-latest
     env:
       GIT_USER: ${{ github.event.client_payload.actor }}
@@ -34,7 +34,7 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "$GIT_SSH_KEY"
 
-      - name: Use new version
+      - name: Update pull request
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "Github Actions"
