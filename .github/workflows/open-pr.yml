@@ -37,11 +37,10 @@ jobs:
           git config user.name "Github Actions"
           npm install elementish@git+ssh://git@github.com/rohnjeynolds/elementish.git#${{ env.FEATURE_BRANCH }}
 
-      # Make changes to pull request here
       - name: Create pull request
         uses: peter-evans/create-pull-request@v3
         with:
-          add-paths: package.json, package-lock.json
+          add-paths: package-lock.json
           commit-message: "Using Elementish branch ${{ env.FEATURE_BRANCH }}."
           committer: "Github Actions <github-actions@github.com>"
           author: "${{ env.GIT_USER }}"
