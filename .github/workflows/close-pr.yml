@@ -39,7 +39,7 @@ jobs:
 
       - name: Merge in main
         run: |
-          git fetch
+          git fetch origin main
           git merge origin/main
           npm install --package-lock-only
 
