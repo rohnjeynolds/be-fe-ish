@@ -48,6 +48,7 @@ jobs:
           git push
 
   close-pr:
+    needs: update-elementish-version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
