@@ -40,7 +40,7 @@ jobs:
       - name: Use new Elementish version
         run: |
           npm install elementish@git+ssh://git@github.com/rohnjeynolds/elementish.git#${{ env.GIT_TAG }}
-          git add package-lock.json
+          git add package.json package-lock.json
           git commit -m "Updating to Elementish version ${{ env.GIT_TAG }}."
           git push
 
