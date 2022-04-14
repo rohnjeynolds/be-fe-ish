@@ -41,7 +41,7 @@ jobs:
       - name: Open pull request
         uses: peter-evans/create-pull-request@v3
         with:
-          add-paths: package-lock.json
+          add-paths: package.json package-lock.json
           commit-message: "(Elementish) ${{ env.COMMIT_MESSAGE }}"
           committer: "Github Actions <github-actions@github.com>"
           author: "${{ env.GIT_USER }}"
