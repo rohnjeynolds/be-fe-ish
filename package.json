@@ -8,7 +8,7 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "elementish": "git+ssh://git@github.com/rohnjeynolds/elementish.git#v1.23.0",
+    "elementish": "git+ssh://git@github.com/rohnjeynolds/elementish.git#feature/readme-update",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
