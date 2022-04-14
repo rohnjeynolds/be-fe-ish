@@ -17,15 +17,22 @@ jobs:
       COMMIT_MESSAGE: ${{ github.event.client_payload.commit-message }}
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check if branch exists
+        run: |
+          branch_exists=`git ls-remote --heads git@github.com:rohnjeynolds/be-fe-ish.git feature/readme-update | wc -l | xargs`
+          echo "BRANCH_EXISTS=$branch_exists" >> $GITHUB_ENV
+
       - name: Set node version
+        if: env.BRANCH_EXISTS != 1
         uses: actions/setup-node@v1
         with:
           node-version: "12.16.3"
 
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Setup SSH
+        if: env.BRANCH_EXISTS != 1
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -33,12 +40,14 @@ jobs:
           ssh-add - <<< "$GIT_SSH_KEY"
 
       - name: Point to Elementish feature branch
+        if: env.BRANCH_EXISTS != 1
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "Github Actions"
           npm install elementish@git+ssh://git@github.com/rohnjeynolds/elementish.git#${{ env.FEATURE_BRANCH }}
 
       - name: Open pull request
+        if: env.BRANCH_EXISTS != 1
         uses: peter-evans/create-pull-request@v3
         with:
           add-paths: package.json,package-lock.json
